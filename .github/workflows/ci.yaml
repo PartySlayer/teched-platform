@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Validate OpenAPI Specification
         #Spectral è lo standard per lintare openAPI
         uses: stoplightio/spectral-action@latest
         with:
-          file_glob: '*OpenAPI.yaml'
+          file_glob: 'docs/*.yaml'
