@@ -1,0 +1,26 @@
+name: CI Pipeline - EdTech MVP
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # validazione specifica openAPI
+  validate-api-contract:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate OpenAPI Specification
+        #Spectral è lo standard per lintare openAPI
+        uses: stoplightio/spectral-action@v3
+        with:
+          file_glob: true
+          file_paths: |
+            migration/file-agnostici/OpenAPI.yaml
+            OpenAPI.yaml
+          severity: error
