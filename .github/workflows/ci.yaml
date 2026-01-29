@@ -17,6 +17,6 @@ jobs:
 
       - name: Validate OpenAPI Specification
         #Spectral è lo standard per lintare openAPI
-        uses: stoplightio/spectral-action@v5
+        uses: stoplightio/spectral-action@v4
         with: 
           file_glob: 'docs/*.yaml'
