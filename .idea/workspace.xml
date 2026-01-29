@@ -4,7 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e197106a-e11a-4c08-802b-ce21e946ed70" name="Changes" comment="" />
+    <list default="true" id="e197106a-e11a-4c08-802b-ce21e946ed70" name="Changes" comment="Added Controllers&#10;imported openApi scheme and API">
+      <change afterPath="$PROJECT_DIR$/src/teched/src/main/resources/static/openapi.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/src/main/java/com/example/teched/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/src/main/java/com/example/teched/controller/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/AuthApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/AuthApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/CoursesApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/CoursesApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/EnrollmentsApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/EnrollmentsApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/ProgressApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/api/ProgressApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/controller/CourseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/controller/CourseController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/ContentUnit$TypeEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/ContentUnit$TypeEnum.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/ProgressContentUnitIdPatchRequest$StatusEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/ProgressContentUnitIdPatchRequest$StatusEnum.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/User$RoleEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/User$RoleEnum.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/UserProgress$StatusEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/teched/target/classes/com/example/teched/model/UserProgress$StatusEnum.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +32,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
+        <option value="Swagger" />
       </list>
     </option>
   </component>
@@ -39,6 +59,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -50,17 +73,22 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.TechedApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/kama/Desktop/teched-platform",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
@@ -69,6 +97,26 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/teched/src/main/java/com/example" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="TechedApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="teched" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.teched.TechedApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.teched.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.TechedApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -91,6 +139,7 @@
       <workItem from="1769714936840" duration="1049000" />
       <workItem from="1769716329017" duration="6129000" />
       <workItem from="1769722478945" duration="161000" />
+      <workItem from="1769722645703" duration="1734000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -108,7 +157,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769718608407</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added Controllers&#10;imported openApi scheme and API">
+      <option name="closed" value="true" />
+      <created>1769722723572</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1769722723572</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,7 +174,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
     <MESSAGE value="import springboot project" />
-    <option name="LAST_COMMIT_MESSAGE" value="import springboot project" />
+    <MESSAGE value="Added Controllers&#10;imported openApi scheme and API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Controllers&#10;imported openApi scheme and API" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

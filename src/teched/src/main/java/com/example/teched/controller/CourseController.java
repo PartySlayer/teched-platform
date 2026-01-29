@@ -17,6 +17,7 @@ import java.util.ArrayList;
         public ResponseEntity<List<ContentUnit>> coursesGet() {
             // Implementazione di prova
             List<ContentUnit> list = new ArrayList<>();
+
             return ResponseEntity.ok(list);
         }
     }
