@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: EdTech MVP API
+  version: 1.0.0
+  description: API MVP OTP-Only. Focus su velocità di sviluppo e struttura contenuti flat.
+
+servers:
+  - url: http://localhost:8080/api/v1
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # utente
+    User:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string, format: email }
+        fullName: { type: string }
+        role: { type: string, enum: [student, admin] }
+
+    # tutto è una ContentUnit
+    ContentUnit:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        type: { type: string, enum: [course, lesson, activity] }
+        title: { type: string }
+        slug: { type: string }
+        metadata: { type: object } # Video URL, durata, etc.
+        parentId: { type: string, format: uuid, nullable: true }
+        orderIndex: { type: integer }
+        
+        # nullable perché se non ho iniziato il corso è null
+        progress: 
+          $ref: '#/components/schemas/UserProgress'
+          nullable: true
+
+    # Progressi utente
+    UserProgress:
+      type: object
+      properties:
+        status: { type: string, enum: [not_started, in_progress, completed] }
+        lastPosition: { type: integer, description: "Secondi nel video" }
+        updatedAt: { type: string, format: date-time }
+
+    # Dashboard
+    EnrollmentSummary:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        course: 
+          type: object
+          properties:
+            id: { type: string, format: uuid }
+            title: { type: string }
+            description: { type: string }
+        enrolledAt: { type: string, format: date-time }
+        # Calcolo rapido per la dashboard (es. 30% completato)
+        overallProgress: { type: number } # num perché da 0.0 a 1.0
+
+paths:
+  # Autenticazione
+  /auth/otp/request:
+    post:
+      summary: Invia codice via email
+      description: Genera e invia un codice OTP monouso all'email specificata. Il codice è valido per 5 minuti.
+      tags: [Auth]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email: { type: string, format: email }
+      responses:
+        '202':
+          description: Email con codice OTP inviata
+          content:
+            application/json: {}
+
+  /auth/otp/verify:
+    post:
+      summary: Verifica codice e ritorna JWT
+      description: Verifica il codice OTP fornito e restituisce un JWT per l'autenticazione. Se l'utente non esiste, viene creato automaticamente.
+      tags: [Auth]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email: { type: string, format: email }
+                code: { type: string }
+      responses:
+        '200':
+          description: JWT generato con successo
+          content:
+            application/json:
+              schema:
+                properties:
+                  token: { type: string, description: "JWT per autenticazione" }
+                  user: { $ref: '#/components/schemas/User' }
+
+  # Lista dei corsi
+  /courses:
+    get:
+      summary: Lista tutti i corsi pubblici (Catalogo)
+      description: Restituisce la lista di tutti i corsi disponibili. Per MVP, tutti i corsi sono pubblici.
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Lista di corsi disponibili
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentUnit'
+
+  # Corsi per ID, lista appiattita (no alberi json)
+  /courses/{id}/structure:
+    get:
+      summary: Struttura piatta del corso (Lezioni + Progresso utente incluso)
+      description: Restituisce la struttura completa di un corso in formato flat, includendo le lezioni e il progresso dell'utente corrente.
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Struttura completa del corso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentUnit'
+
+  # Progresso dei corsi
+  /progress/{contentUnitId}:
+    patch:
+      summary: Heartbeat del video (aggiorna secondo per secondo o al completamento)
+      description: Aggiorna il progresso dell'utente per un contenuto specifico. Utilizzato per tracciare la posizione nel video e lo stato di completamento.
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: contentUnitId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                status: { type: string, enum: [not_started, in_progress, completed] }
+                lastPosition: { type: integer }
+      responses:
+        '200':
+          description: Progresso aggiornato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProgress'
+
+  # Dashboard
+  /enrollments:
+    get:
+      summary: I miei corsi (Dashboard)
+      description: Restituisce la dashboard personale con tutti i corsi a cui l'utente è iscritto, inclusi i progressi complessivi.
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Dashboard personale con corsi iscritti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EnrollmentSummary'
+
+    post:
+      summary: Iscrivi utente al corso (per MVP pagamenti simulati, successivamente si pensa Stripe)
+      description: Iscrivi l'utente al corso specificato. Per MVP, assumiamo che tutti i corsi siano gratuiti.
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                courseId: { type: string, format: uuid }
+      responses:
+        '201':
+          description: Iscrizione completata con successo
+          content:
+            application/json: {}
