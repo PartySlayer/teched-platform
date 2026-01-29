@@ -19,8 +19,4 @@ jobs:
         #Spectral è lo standard per lintare openAPI
         uses: stoplightio/spectral-action@v3
         with:
-          file_glob: true
-          file_paths: |
-            migration/file-agnostici/OpenAPI.yaml
-            OpenAPI.yaml
-          severity: error
+          file_glob: '*OpenAPI.yaml'
