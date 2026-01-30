@@ -5,8 +5,10 @@ import com.example.teched.model.AuthOtpRequestPostRequest;
 import com.example.teched.model.AuthOtpVerifyPostRequest;
 import com.example.teched.model.AuthOtpVerifyPost200Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 @RestController
 public class AuthController implements AuthApi {
 
