@@ -97,7 +97,7 @@ const Header: React.FC = () => {
               onClick={() => {
                 setIsSignInOpen(true)
               }}>
-              Sign In
+              Sign In with OTP
             </Link>
             {isSignInOpen && (
               <div className='fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50'>
@@ -194,7 +194,7 @@ const Header: React.FC = () => {
                   setIsSignInOpen(true)
                   setNavbarOpen(false)
                 }}>
-                Sign In
+                Request OTP
               </Link>
               <Link
                 href='#'
@@ -203,7 +203,7 @@ const Header: React.FC = () => {
                   setIsSignUpOpen(true)
                   setNavbarOpen(false)
                 }}>
-                Sign Up
+                Request OTP
               </Link>
             </div>
           </nav>
