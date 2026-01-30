@@ -16,10 +16,7 @@ const Signin = () => {
   // Grazie all'attributo 'name' sull'input, questa funzione aggiorna il campo corretto
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData({...formData, [name]: value});
   };
 
   // 3. Funzione per inviare i dati a Spring Boot
@@ -70,7 +67,7 @@ const Signin = () => {
             placeholder='Email'
             required
             value={formData.email}
-            onChange={handleChange} // FONDAMENTALE: permette di scrivere nell'input
+           onChange={handleChange} // FONDAMENTALE: permette di scrivere nell'input
             className='w-full rounded-md border border-solid bg-transparent px-5 py-3 text-base text-dark outline-hidden transition border-gray-200 placeholder:text-black/30 focus:border-primary focus-visible:shadow-none text-black'
           />
         </div>
