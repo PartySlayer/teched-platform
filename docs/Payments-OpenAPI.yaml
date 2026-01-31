@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Payment Service API
+  version: 1.1.1
+  description: Stripe-based payments with secure Webhook handling
+
+servers:
+  - url: http://payment-service/api
+
+security:
+  - bearerAuth: []
+
+paths:
+  /payments/checkout:
+    post:
+      summary: Create Stripe Checkout session
+      operationId: createCheckoutSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+      responses:
+        '200':
+          description: Checkout created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /payments/webhook:
+    post:
+      summary: Stripe webhook endpoint
+      description: Public endpoint called by Stripe. Validated via signature.
+      security: []
+      parameters:
+        - in: header
+          name: Stripe-Signature
+          schema:
+            type: string
+          required: true
+          description: Signature to verify the event authenticity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Raw Stripe Event object
+      responses:
+        '200':
+          description: Webhook processed successfully
+        '400':
+          description: Signature verification failed or invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CheckoutRequest:
+      type: object
+      required: [courseId]
+      properties:
+        courseId:
+          type: string
+          format: uuid
+
+    CheckoutResponse:
+      type: object
+      properties:
+        checkoutUrl:
+          type: string
+          format: uri
+
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI reference identifying the problem type
+        title:
+          type: string
+          description: Short summary of the problem
+        status:
+          type: integer
+          description: HTTP status code
+        detail:
+          type: string
+          description: Specific explanation
+        instance:
+          type: string
+          format: uri
+          description: URI reference to the specific occurrence

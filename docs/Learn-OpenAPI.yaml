@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: Learn Service API
+  version: 1.1.0
+  description: Courses, enrollments, progress and video access
+
+servers:
+  - url: http://learn-service/api
+
+security:
+  - bearerAuth: []
+
+paths:
+  /courses:
+    get:
+      summary: List courses (Paginated)
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Courses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCourseResponse'
+
+  /enrollments/me:
+    get:
+      summary: Get my enrollments
+      responses:
+        '200':
+          description: My enrollments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Enrollment'
+
+  /progress/{courseId}:
+    get:
+      summary: Get my progress
+      parameters:
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Progress
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseProgress'
+        '404':
+          description: Course not found or user not enrolled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /videos/{lessonId}/stream:
+    get:
+      summary: Get presigned video URL
+      parameters:
+        - in: path
+          name: lessonId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Video URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoStreamResponse'
+        '404':
+          description: Lesson not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /internal/enrollments:
+    post:
+      summary: Create enrollment (internal)
+      security:
+        - serviceAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternalEnrollmentRequest'
+      responses:
+        '201':
+          description: Enrollment created
+        '400':
+          description: Bad request (e.g. user already enrolled)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    serviceAuth:
+      type: apiKey
+      in: header
+      name: X-Service-Token
+
+  schemas:
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+
+    Enrollment:
+      type: object
+      properties:
+        courseId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [ACTIVE, COMPLETED]
+        enrolledAt:
+          type: string
+          format: date-time
+
+    InternalEnrollmentRequest:
+      type: object
+      required: [userId, courseId]
+      properties:
+        userId:
+          type: string
+          format: uuid
+        courseId:
+          type: string
+          format: uuid
+
+    CourseProgress:
+      type: object
+      properties:
+        completedLessons:
+          type: integer
+        totalLessons:
+          type: integer
+        percentage:
+          type: number
+
+    VideoStreamResponse:
+      type: object
+      properties:
+        presignedUrl:
+          type: string
+          format: uri
+        expiresIn:
+          type: integer
+
+    PaginatedCourseResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+        page:
+          type: object
+          properties:
+            size:
+              type: integer
+            number:
+              type: integer
+            totalElements:
+              type: integer
+            totalPages:
+              type: integer
+
+    ProblemDetails:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
