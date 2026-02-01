@@ -9,12 +9,9 @@ import software.amazon.awssdk.services.ses.model.*;
 public class EmailService {
 
     private final SesClient sesClient;
-    
+
     @Value("${aws.ses.from-email:sender@example.com}")
     private String fromEmail;
-    
-    @Value("${aws.ses.configuration-set:}")
-    private String configurationSet;
 
     public EmailService(SesClient sesClient) {
         this.sesClient = sesClient;
@@ -32,11 +29,7 @@ public class EmailService {
                                     .text(Content.builder().data(textBody).build())
                                     .build())
                             .build());
-            
-            if (!configurationSet.isEmpty()) {
-                requestBuilder.configurationSetName(configurationSet);
-            }
-            
+
             sesClient.sendEmail(requestBuilder.build());
         } catch (SesException e) {
             throw new RuntimeException("Failed to send email", e);
