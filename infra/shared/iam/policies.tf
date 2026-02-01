@@ -31,14 +31,14 @@ resource "aws_iam_role_policy" "terraform_permissions" {
         Sid    = "ReadOnlyGlobal"
         Effect = "Allow"
         Action = [
-          "ecs:Describe*",
-          "ecs:List*",
+          "ecs:Describe*", "ecs:List*",
           "rds:Describe*",
-          "iam:Get*",
-          "iam:List*",
-          "secretsmanager:Describe*",
-          "secretsmanager:ListSecrets",
-
+          "elasticloadbalancing:Describe*",
+          "apigateway:GET",
+          "iam:Get*", "iam:List*",
+          "secretsmanager:Describe*", "secretsmanager:ListSecrets",
+          "cloudfront:List*",
+          "acm:Describe*", "acm:ListCertificates"
         ]
         Resource = "*"
       },
@@ -52,28 +52,45 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "ecs:*",
           "rds:*",
           "secretsmanager:*",
-          "alb:*",
-          "api-gateway:*",
+          "elasticloadbalancing:*",
+          "apigateway:*",
           "s3:*",
           "cloudfront:*",
           "acm:*"
 
-
-
         ]
         Resource = [
-
-          "arn:aws:ecs:*:*:/teched-*",
-
+          
+          # ECS
+          "arn:aws:ecs:*:*:cluster/teched-*",
+          "arn:aws:ecs:*:*:task-definition/teched-*",
+          "arn:aws:ecs:*:*:service/*/teched-*",
+          
+          # RDS
           "arn:aws:rds:*:*:db:teched-*",
           "arn:aws:rds:*:*:snapshot:teched-*",
+          "arn:aws:rds:*:*:subgrp:teched-*",
 
           # Secrets Manager
-          "arn:aws:secretsmanager:*:*:secret:teched-*"
+          "arn:aws:secretsmanager:*:*:secret:teched-*",
+
+          # S3
+          "arn:aws:s3:::teched-*",
+          "arn:aws:s3:::teched-*/*", 
+  
+          # CloudFront ("distribution/*" permette tutto, in caso vanno messi tags e chiuso lo scope.
+          "arn:aws:cloudfront::*:distribution/*", 
+  
+          # ALB / ELB arn:aws:elasticloadbalancing:region:account:loadbalancer/app/nome/id
+          "arn:aws:elasticloadbalancing:*:*:loadbalancer/*",
+          "arn:aws:elasticloadbalancing:*:*:targetgroup/*",
+  
+          # ACM
+          "arn:aws:acm:*:*:certificate/*"
         ]
       },
 
-      # IAM sia scritto in modo puntuale che perché "*" è pericoloso
+      # IAM scritto in modo puntuale perché "*" è pericoloso
       {
         Sid    = "IAMScopedManagement"
         Effect = "Allow"

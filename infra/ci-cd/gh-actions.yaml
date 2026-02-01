@@ -29,8 +29,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume:  # output bootstrap
-        aws-region: eu-west-1
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }} # output bootstrap
+        aws-region: ${{ secrets.AWS_REGION }}
 
     # 3. Installa Terraform
     - name: Setup Terraform
