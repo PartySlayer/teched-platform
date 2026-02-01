@@ -1,11 +1,11 @@
 terraform {
-
+  # non ti scordare che è obbligatorio hardcode qui
   backend "s3" {
-    bucket         = "teched-platform-xx-tf-state" # per ora hardcoded
+    bucket         = "teched-platform-xx-tf-state" # non ti scordare
     key            = "envs/dev/terraform.tfstate"  # path per tfstate DEV
-    region         = "eu-west-1"                   # non ti scordare che è obbligatorio hardcode qui
+    region         = "eu-west-1"                   # non ti scordare
     encrypt        = true
-    dynamodb_table = "teched-platform-xx-tf-locks" # per ora hardcoded
+    dynamodb_table = "teched-platform-xx-tf-locks" # non ti scordare
   }
 
   required_providers {

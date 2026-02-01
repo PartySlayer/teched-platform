@@ -1,3 +1,11 @@
+data "aws_s3_bucket" "terraform_state" {
+  bucket = var.terraform_state_bucket_name
+}
+
+data "aws_dynamodb_table" "terraform_locks" {
+  name = var.terraform_locks_table_name
+}
+
 # Github Actions CI/CD role for terraform
 resource "aws_iam_role_policy" "terraform_permissions" {
   name = "terraform-deploy-policy"
@@ -20,9 +28,9 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "dynamodb:DeleteItem"
         ]
         Resource = [
-          aws_s3_bucket.terraform_state.arn,
-          "${aws_s3_bucket.terraform_state.arn}/*",
-          aws_dynamodb_table.terraform_locks.arn
+          data.aws_s3_bucket.terraform_state.arn,
+          "${data.aws_s3_bucket.terraform_state.arn}/*",
+          data.aws_dynamodb_table.terraform_locks.arn
         ]
       },
 
