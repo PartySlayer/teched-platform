@@ -36,6 +36,7 @@ const Signin = () => {
 
       if (response.ok) {
         alert("Codice OTP inviato correttamente!");
+        alert(JSON.stringify(response.formData))
       } else {
         alert("Errore nella richiesta al server.");
       }
@@ -71,17 +72,6 @@ const Signin = () => {
             className='w-full rounded-md border border-solid bg-transparent px-5 py-3 text-base text-dark outline-hidden transition border-gray-200 placeholder:text-black/30 focus:border-primary focus-visible:shadow-none text-black'
           />
         </div>
-        <div className='mb-[22px]'>
-          <input
-            type='password'
-            name='password' // FONDAMENTALE: deve corrispondere alla chiave nello stato
-            placeholder='Password'
-            required
-            value={formData.password}
-            onChange={handleChange} // FONDAMENTALE: permette di scrivere nell'input
-            className='w-full rounded-md border border-solid bg-transparent px-5 py-3 text-base text-dark outline-hidden transition border-gray-200 placeholder:text-black/30 focus:border-primary focus-visible:shadow-none text-black'
-          />
-        </div>
         <div className='mb-9'>
           <button
             type='submit'
@@ -90,12 +80,6 @@ const Signin = () => {
           </button>
         </div>
       </form>
-
-      <Link
-        href='/'
-        className='mb-2 inline-block text-base text-black hover:text-primary hover:underline'>
-        Forgot Password?
-      </Link>
       <p className='text-black text-base'>
         Not a member yet?{' '}
         <Link href='/' className='text-primary hover:underline'>
