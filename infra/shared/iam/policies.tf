@@ -68,12 +68,12 @@ resource "aws_iam_role_policy" "terraform_permissions" {
 
         ]
         Resource = [
-          
+
           # ECS
           "arn:aws:ecs:*:*:cluster/teched-*",
           "arn:aws:ecs:*:*:task-definition/teched-*",
           "arn:aws:ecs:*:*:service/*/teched-*",
-          
+
           # RDS
           "arn:aws:rds:*:*:db:teched-*",
           "arn:aws:rds:*:*:snapshot:teched-*",
@@ -84,15 +84,15 @@ resource "aws_iam_role_policy" "terraform_permissions" {
 
           # S3
           "arn:aws:s3:::teched-*",
-          "arn:aws:s3:::teched-*/*", 
-  
+          "arn:aws:s3:::teched-*/*",
+
           # CloudFront ("distribution/*" permette tutto, in caso vanno messi tags e chiuso lo scope.
-          "arn:aws:cloudfront::*:distribution/*", 
-  
+          "arn:aws:cloudfront::*:distribution/*",
+
           # ALB / ELB arn:aws:elasticloadbalancing:region:account:loadbalancer/app/nome/id
           "arn:aws:elasticloadbalancing:*:*:loadbalancer/*",
           "arn:aws:elasticloadbalancing:*:*:targetgroup/*",
-  
+
           # ACM
           "arn:aws:acm:*:*:certificate/*"
         ]

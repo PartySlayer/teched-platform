@@ -10,9 +10,9 @@ data "aws_iam_policy_document" "ecs_tasks_execution_role" {
 }
 
 resource "aws_iam_role" "ecs_tasks_execution_role" {
-  name               = "${var.project_name}-ecs-task-execution-role"
-  assume_role_policy = data.aws_iam_policy_document.ecs_tasks_execution_role.json
-  force_detach_policies = true              # per modifica dei ruoli senza frizione
+  name                  = "${var.project_name}-ecs-task-execution-role"
+  assume_role_policy    = data.aws_iam_policy_document.ecs_tasks_execution_role.json
+  force_detach_policies = true # per modifica dei ruoli senza frizione
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_tasks_execution_role" {
