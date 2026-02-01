@@ -78,7 +78,8 @@ resource "aws_iam_role_policy" "terraform_permissions" {
           "iam:Get*",
           "iam:List*",
           "secretsmanager:Describe*",
-          "secretsmanager:ListSecrets"
+          "secretsmanager:ListSecrets",
+          
         ]
         Resource = "*"
       },
@@ -91,7 +92,14 @@ resource "aws_iam_role_policy" "terraform_permissions" {
 
           "ecs:*",
           "rds:*",
-          "secretsmanager:*"
+          "secretsmanager:*",
+          "alb:*",
+          "api-gateway:*",
+          "s3:*",
+          "cloudfront:*",
+          "acm:*"
+        
+
 
         ]
         Resource = [
@@ -106,7 +114,7 @@ resource "aws_iam_role_policy" "terraform_permissions" {
         ]
       },
 
-      # IAM sia scritto in modo puntuale che peché "*" è pericoloso
+      # IAM sia scritto in modo puntuale che perché "*" è pericoloso
       {
         Sid    = "IAMScopedManagement"
         Effect = "Allow"
