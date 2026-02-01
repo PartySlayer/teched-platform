@@ -1,0 +1,5 @@
+AWS S3: È il cuore tecnologico per i contenuti. Non salviamo mai i video direttamente nel database (sarebbe lentissimo e costoso); salviamo i video su S3 e nel database teniamo solo il riferimento (il "key" o l'ID del file).
+
+OpenFeign: In un'architettura a microservizi, questo è il tuo "ponte". Quando un utente prova a vedere un video, learn-service deve chiedere a auth-service: "Questo utente ha una sessione valida?". Feign rende questa chiamata facile come chiamare un metodo Java locale.
+
+PostgreSQL: Qui avrai la struttura dati più complessa (Relazioni Many-to-Many tra utenti e corsi, One-to-Many tra corsi e lezioni).

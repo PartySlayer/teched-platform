@@ -1,0 +1,11 @@
+🏗️ Riassunto: Il Parent POM (backend/pom.xml)
+Pensa a questo file come alla "Costituzione" del tuo progetto.
+Non fa nulla di pratico (non compila codice Java), ma stabilisce le regole per tutti i microservizi:
+
+Centralizzazione: Definisce le versioni di Java (17), Spring Boot (3.2.2) e Spring Cloud in un unico punto.
+
+Aggregazione: Grazie alla sezione <modules>, ti permette di compilare l'intero sistema
+ con un solo comando (mvn clean install) dalla cartella backend.
+
+Eredità: Tutti i figli (Auth, Learn, Payment)
+"ascoltano" questo file, quindi non dovrai mai più scrivere la versione di una dipendenza comune nei loro POM.
