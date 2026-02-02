@@ -27,4 +27,14 @@ public class AuthController {
                 "message", "OTP sent to " + request.getEmail()
         ));
     }
+    @PostMapping("/otp/verify")
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest request, String code) {
+
+        authService.verifyOtp(request.getEmail(), code);
+
+        return ResponseEntity.ok(Map.of(
+                "status", "success",
+                "message", "OTP sent to " + request.getEmail()
+        ));
+    }
 }

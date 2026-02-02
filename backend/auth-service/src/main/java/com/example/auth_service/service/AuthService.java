@@ -21,6 +21,24 @@ public class AuthService {
         this.emailService = emailService;
     }
 
+    public boolean verifyOtp(String email, String code) {
+        // 1. Cerca l'ultimo OTP generato per quella email
+        return otpRepository.findFirstByEmailOrderByCreatedAtDesc(email)
+                .map(otp -> {
+                    // 2. Controlla se il codice coincide e se non è scaduto
+                    boolean isValid = otp.getOtpCode().equals(code);
+                    boolean isNotExpired = otp.getExpiresAt().isAfter(LocalDateTime.now());
+
+                    if (isValid && isNotExpired) {
+                        // Opzionale: cancella l'OTP dopo l'uso o marcalo come usato
+                        otpRepository.delete(otp);
+                        return true;
+                    }
+                    return false;
+                })
+                .orElse(false);
+    }
+
     @Transactional // Garantisce l'integrità del DB
     public void processOtpRequest(OtpRequest request) {
         // 1. Generazione codice
