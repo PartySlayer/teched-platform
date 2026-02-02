@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Media Service API
+  version: 1.0.0
+  description: Secure access to media content via presigned URLs
+
+servers:
+  - url: http://media-service/api
+
+security:
+  - bearerAuth: []
+
+paths:
+  /media/videos/{videoId}/access:
+    post:
+      summary: Get secure access to video
+      description: Returns a presigned URL if user is authorized
+      parameters:
+        - in: path
+          name: videoId
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoAccessRequest'
+      responses:
+        '200':
+          description: Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoAccessResponse'
+        '403':
+          description: Not enrolled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    VideoAccessRequest:
+      type: object
+      required: [courseId]
+      properties:
+        courseId:
+          type: string
+          format: uuid
+
+    VideoAccessResponse:
+      type: object
+      properties:
+        presignedUrl:
+          type: string
+          format: uri
+        expiresIn:
+          type: integer
+          description: Seconds before expiration
+
+    ProblemDetails:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }

@@ -1,0 +1,138 @@
+openapi: 3.0.3
+
+info:
+  title: Auth Service API
+  version: 1.0.0
+  description: Authentication via Email OTP with JWT session
+
+servers:
+  - url: http://auth-service/api
+
+security:
+  - bearerAuth: []
+
+paths:
+
+  /auth/otp/request:
+    post:
+      summary: Request OTP via email
+      operationId: requestOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpRequest'
+      responses:
+        '204':
+          description: OTP sent successfully
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/otp/verify:
+    post:
+      summary: Verify OTP and generate JWT
+      operationId: verifyOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpVerifyRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid or expired OTP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/me:
+    get:
+      summary: Get current authenticated user
+      operationId: getCurrentUser
+      responses:
+        '200':
+          description: Current user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    OtpRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+
+    OtpVerifyRequest:
+      type: object
+      required:
+        - email
+        - otp
+      properties:
+        email:
+          type: string
+          format: email
+        otp:
+          type: string
+          example: "123456"
+
+    AuthResponse:
+      type: object
+      required:
+        - accessToken
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid"
+        email:
+          type: string
+          format: email
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid request
+        timestamp:
+          type: string
+          format: date-time
