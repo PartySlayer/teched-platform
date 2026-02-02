@@ -1,0 +1,16 @@
+# IntelliJ e IDE
+.idea/
+*.iml
+out/
+gen/
+
+# Maven
+target/
+**/target/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# File temporanei
+*.log
