@@ -1,10 +1,12 @@
 resource "aws_eip" "nat" {
+  count  = var.enable_nat ? 1 : 0
   domain = "vpc"
 
 }
 
 resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.nat.id
+  count         = var.enable_nat ? 1 : 0
+  allocation_id = aws_eip.nat[0].id
   subnet_id     = values(aws_subnet.public)[0].id
 
   depends_on = [aws_internet_gateway.this]
