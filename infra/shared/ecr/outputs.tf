@@ -12,3 +12,7 @@ output "payments_repository_url" {
   value       = aws_ecr_repository.payments.repository_url
   description = "Payments ECR repository URL"
 }
+
+
+## how do I pull output from there to another terraform state? lol
+## let me check 
