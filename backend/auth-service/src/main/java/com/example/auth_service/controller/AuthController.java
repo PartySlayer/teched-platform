@@ -2,14 +2,14 @@ package com.example.auth_service.controller;
 
 import com.example.auth_service.service.AuthService;
 import com.teched.auth.model.dto.OtpRequest;
-import org.springframework.http.HttpEntity;
+import com.teched.auth.model.dto.OtpVerifyRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/v1/auth")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
@@ -30,9 +30,9 @@ public class AuthController {
         ));
     }
     @PostMapping("/otp/verify")
-    public ResponseEntity<?> verifyOtp(@RequestBody OtpRequest request,@RequestBody String code) {
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpVerifyRequest request) {
         // 1. Chiamata al servizio usando i dati estratti dal body della richiesta
-        boolean isValid = authService.verifyOtp(request.getEmail(), code);
+        boolean isValid = authService.verifyOtp(request.getEmail(), request.getOtp());
 
         if (isValid) {
             return ResponseEntity.ok(Map.of(

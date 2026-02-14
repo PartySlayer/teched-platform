@@ -25,9 +25,11 @@ public class AuthService {
         // 1. Cerca l'ultimo OTP generato per quella email
         return otpRepository.findFirstByEmailOrderByCreatedAtDesc(email)
                 .map(otp -> {
+                    System.out.println(otp.getOtpCode() + " Questo è l'otp nel db");
                     // 2. Controlla se il codice coincide e se non è scaduto
                     boolean isValid = otp.getOtpCode().equals(code);
                     boolean isNotExpired = otp.getExpiresAt().isAfter(LocalDateTime.now());
+                    System.out.println(isValid);
 
                     if (isValid && isNotExpired) {
                         // Opzionale: cancella l'OTP dopo l'uso o marcalo come usato
@@ -50,7 +52,7 @@ public class AuthService {
         otpEntity.setOtpCode(otpCode);
         otpEntity.setCreatedAt(LocalDateTime.now());
         otpEntity.setExpiresAt(LocalDateTime.now().plusMinutes(5));
-
+        System.out.println(otpCode + "Questo è l'otp");
         // 3. Persistenza
         otpRepository.save(otpEntity);
 
