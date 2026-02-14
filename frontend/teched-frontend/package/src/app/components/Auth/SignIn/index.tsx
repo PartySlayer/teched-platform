@@ -43,8 +43,8 @@ const Signin = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await fetch("/api/auth/otp/request", {
+    try { 
+      const response = await fetch("/api/v1/auth/otp/request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email }),
@@ -64,9 +64,18 @@ const Signin = () => {
   const verifyOtp = async () => {
     const fullOtp = otp.join('');
     // Qui andrebbe la chiamata per verificare l'OTP
+    const response = await fetch('/api/v1/auth/otp/verify',{ 
+      method: 'POST',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ email: formData.email , otp: fullOtp})
+  });
+  if (response.ok) {
+    router.push('/corsi'); // Esempio di redirect
+  }else{
+    alert('otp non valido!')
+  }
     console.log("Verifico OTP:", fullOtp);
     // Se ok: router.push('/corsi');
-    router.push('/corsi'); // Esempio di redirect
   };
 
   return (
