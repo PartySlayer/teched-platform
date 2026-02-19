@@ -55,7 +55,7 @@ public class AuthService {
         otpEntity.setOtpCode(otpCode);
         otpEntity.setCreatedAt(LocalDateTime.now());
         otpEntity.setExpiresAt(LocalDateTime.now().plusMinutes(5));
-        System.out.println(otpCode + "Questo è l'otp");
+        System.out.println(otpCode + " Questo è l'otp");
         // 3. Persistenza
         otpRepository.save(otpEntity);
 
