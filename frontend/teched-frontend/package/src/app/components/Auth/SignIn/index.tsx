@@ -61,23 +61,23 @@ const Signin = () => {
     }
   };
 
-  const verifyOtp = async () => {
+ const verifyOtp = async () => {
     const fullOtp = otp.join('');
-    // Qui andrebbe la chiamata per verificare l'OTP
-    const response = await fetch('/api/v1/auth/otp/verify',{ 
+    
+    // NOTA: Chiama /api/login (la rotta BFF), non il backend 8080 direttamente
+    const response = await fetch('/api/login', { 
       method: 'POST',
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ email: formData.email , otp: fullOtp})
-  });
-  if (response.ok) {
-    router.push('/corsi'); // Esempio di redirect
-  }else{
-    alert('otp non valido!')
-  }
-    console.log("Verifico OTP:", fullOtp);
-    // Se ok: router.push('/corsi');
-  };
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: formData.email, otp: fullOtp })
+    });
 
+    if (response.ok) {
+      // NON salva nulla in LocalStorage. Il cookie è già nel browser
+      router.push('/corsi'); 
+    } else {
+      alert('OTP non valido!');
+    }
+};
   return (
     <>
       {/* Form Originale */}
