@@ -1,6 +1,7 @@
 package com.example.auth_service.controller;
 
 import com.example.auth_service.service.AuthService;
+import com.teched.auth.model.dto.AuthResponse;
 import com.teched.auth.model.dto.OtpRequest;
 import com.teched.auth.model.dto.OtpVerifyRequest;
 import org.springframework.http.HttpStatus;
@@ -32,13 +33,10 @@ public class AuthController {
     @PostMapping("/otp/verify")
     public ResponseEntity<?> verifyOtp(@RequestBody OtpVerifyRequest request) {
         // 1. Chiamata al servizio usando i dati estratti dal body della richiesta
-        boolean isValid = authService.verifyOtp(request.getEmail(), request.getOtp());
+        String token = authService.verifyOtp(request.getEmail(), request.getOtp());
 
-        if (isValid) {
-            return ResponseEntity.ok(Map.of(
-                    "status", "success",
-                    "message", "OTP verified successfully"
-            ));
+        if (token != null) {
+            return ResponseEntity.ok(new AuthResponse(token));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                     "status", "error",

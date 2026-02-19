@@ -3,6 +3,7 @@ package com.example.auth_service.service;
 import com.example.auth_service.amazonaws.EmailService;
 import com.example.auth_service.model.Otp;
 import com.example.auth_service.repository.OtpRepository;
+import com.example.auth_service.security.JwtUtils;
 import com.teched.auth.model.dto.OtpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,13 +16,15 @@ public class AuthService {
     private final OtpRepository otpRepository;
     private final EmailService emailService;
     private final Random random = new Random();
+    private final JwtUtils jwtUtils;
 
-    public AuthService(OtpRepository otpRepository, EmailService emailService) {
+    public AuthService(OtpRepository otpRepository, EmailService emailService, JwtUtils jwtUtils) {
         this.otpRepository = otpRepository;
         this.emailService = emailService;
+        this.jwtUtils = jwtUtils;
     }
 
-    public boolean verifyOtp(String email, String code) {
+    public String verifyOtp(String email, String code) {
         // 1. Cerca l'ultimo OTP generato per quella email
         return otpRepository.findFirstByEmailOrderByCreatedAtDesc(email)
                 .map(otp -> {
@@ -34,11 +37,11 @@ public class AuthService {
                     if (isValid && isNotExpired) {
                         // Opzionale: cancella l'OTP dopo l'uso o marcalo come usato
                         otpRepository.delete(otp);
-                        return true;
+                        return jwtUtils.generateToken(email);
                     }
-                    return false;
+                    return null;
                 })
-                .orElse(false);
+                .orElse(null);
     }
 
     @Transactional // Garantisce l'integrità del DB
