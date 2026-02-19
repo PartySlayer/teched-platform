@@ -4,6 +4,7 @@ import { MentorType } from '@/app/types/mentor'
 import { HeaderType } from '@/app/types/menu'
 import { TestimonialType } from '@/app/types/testimonial'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
 const HeaderData: HeaderType[] = [
   { label: 'Home', href: '/' },
@@ -154,4 +155,40 @@ export const GET = () => {
     TestimonialData,
     FooterLinkData,
   })
+}
+
+// --- METODO POST: BFF Login ---
+export const POST = async (request: Request) => {
+  try {
+    const { email, otp } = await request.json();
+
+    // 1. Chiamata al backend Spring Boot (Auth-Service)
+    const backendRes = await fetch('http://localhost:8080/api/v1/auth/otp/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    if (!backendRes.ok) {
+      return NextResponse.json({ error: 'OTP non valido o scaduto' }, { status: 401 });
+    }
+
+    const data = await backendRes.json(); // Il backend risponde con { "token": "..." }
+
+    // 2. Salvataggio sicuro nel Cookie HttpOnly
+    const cookieStore = await cookies();
+    cookieStore.set('session_token', data.token, {
+      httpOnly: true,    // JS non può leggerlo (Sicurezza XSS)
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'strict',
+      path: '/',         // Disponibile in tutta l'app
+      maxAge: 60 * 60 * 24, // Scade dopo 24 ore
+    });
+
+    return NextResponse.json({ status: 'success', message: 'Logged in successfully' });
+
+  } catch (error) {
+    console.error("BFF Error:", error);
+    return NextResponse.json({ error: 'Errore interno del server' }, { status: 500 });
+  }
 }
