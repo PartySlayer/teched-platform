@@ -1,0 +1,61 @@
+services:
+  # --- AUTH SERVICE ---
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-auth:5432/authdb
+    depends_on:
+      - db-auth
+
+  # --- LEARN SERVICE ---
+  learn-service:
+    build:
+      context: .
+      dockerfile: learn-service/Dockerfile
+    ports:
+      - "8081:8080" # Mappa su 8081 per evitare conflitti con Auth
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-learn:5432/learndb
+    depends_on:
+      - db-learn
+
+  # --- PAYMENT SERVICE ---
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    ports:
+      - "8082:8080" # Mappa su 8082
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-payment:5432/paymentdb
+    depends_on:
+      - db-payment
+
+  # --- DATABASES ---
+  db-auth:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+
+  db-learn:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=learndb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+
+  db-payment:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=paymentdb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass

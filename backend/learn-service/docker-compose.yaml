@@ -1,0 +1,23 @@
+services:
+  learn-service:
+    build:
+      context: ..
+      dockerfile: learn-service/Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-learn:5432/learndb
+      - SPRING_DATASOURCE_USERNAME=user\
+      - SPRING_DATASOURCE_PASSWORD=pass
+    depends_on:
+      - db-learn
+
+  db-learn:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=learndb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - "5433:5432" # Mappa su 5433 locale per non andare in conflitto se hai già Postgres installato

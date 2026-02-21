@@ -25,6 +25,6 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY --from=build /app/auth-service/target/auth-service-1.0.0.jar ./auth-service.jar
+COPY --from=build /app/payment-service/target/payment-service-1.0.0.jar ./payment-service.jar
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "auth-service.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "payment-service.jar"]

@@ -1,0 +1,12 @@
+# auth-service/src/main/resources/application-prod.yml
+spring:
+  config:
+    import: "optional:aws-secretsmanager:teched-platform-xx/prod/payments"
+  datasource:
+    url: ${DATABASE_URL}
+    #username: ${spring.datasource.username}
+    #password: ${spring.datasource.password}
+    #url: ${DB_URL}
+    #username: ${DB_USERNAME}
+    #password: ${DB_PASSWORD}
+# Ho notato che nel file secrets hai aggiunto solo URL quindi suppongo che user e password verranno passati nell'URL
